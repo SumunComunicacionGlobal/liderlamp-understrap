@@ -1,0 +1,170 @@
+html {
+	scroll-behavior: smooth;
+	overflow-x: hidden;
+}
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.admin-bar {
+
+	.fixed-top {
+		top: 46px;
+	}
+}
+a {
+	img, svg {
+		transition: opacity .3s ease;
+	}
+	&:hover {
+		img, svg {
+			opacity: .7;
+		}
+	}
+}
+
+.text-white a {
+	color: $white;
+}
+button.navbar-toggler:focus {
+	outline: 0;
+}
+.alignfull {
+	margin: 32px calc(50% - 50vw);
+	max-width: 100vw;
+	width: 100vw;
+	margin-top: 64px;
+	margin-bottom: 64px;
+}
+
+.bg-cover,
+.woocommerce-products-header { 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-position: center center;
+}
+
+.woocommerce .col2-set .col-1, 
+.woocommerce-page .col2-set .col-1,
+.woocommerce .col2-set .col-2, 
+.woocommerce-page .col2-set .col-2 {
+	max-width: unset;
+}
+
+.full-screen {
+	min-height: 100vh;
+}
+
+.wp-block-image figcaption {
+	font-size: $font-size-sm;
+}
+.object-fit-cover {
+	object-fit: cover;
+}
+.wp-block-table {
+	th, td {
+		padding: .8rem;
+	}
+}
+.pagination {
+	margin-top: 2rem;
+}
+.comments-area {
+	margin-top: 3rem;
+}
+.wp-columns-block-no-gutters {
+
+	.wp-block-column:not(:first-child) {
+		margin-left: 0;
+	}
+}
+.back-to-top {
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	width: 60px;
+	height: 60px;
+	background-color: $secondary;
+	border: 1px solid transparent;
+	color: $white;
+	opacity: 0;
+	transition: all .3s ease;
+	z-index: 10000;
+	transform: rotate(270deg);
+	background-image: url('../img/flecha-derecha.svg');
+	background-size: 30px auto;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	&:hover {
+		background-color: $light;
+		border: 1px solid $secondary;
+	}
+}
+.scrolled .back-to-top {
+	opacity: .9;
+}
+table {
+	tr {
+		border: 1px solid transparentize($body-color, .8);
+	}
+	th {
+		background-color: $gray-100;
+	}
+}
+
+/* Tipografía */
+.has-large-font-size, .has-larger-font-size, .has-huge-font-size {
+	line-height: 1.2;
+}
+
+/***/
+/* Formularios */
+.wpcf7 {
+	max-width: 100% !important;
+}
+label {
+	font-size: $font-size-sm;
+}
+.wpcf7-response-output {
+    height: auto !important;
+}
+.form-control-sm {
+	height: auto;
+}
+/***/
+
+
+@each $name, $color in $colors {
+
+	.has-#{$name}-color,
+	.has-#{$name}-color:visited {
+		color: $color;
+	}
+	.has-#{$name}-background-color {
+		background-color: $color;
+		border-color: $color;
+	}
+}
+@each $name, $color in $theme-colors {
+
+	.has-#{$name}-color,
+	.has-#{$name}-color:visited {
+		color: $color;
+	}
+	.has-#{$name}-background-color {
+		background-color: $color;
+		border-color: $color;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.admin-bar {
+
+		.fixed-top {
+			top: 32px;
+		}
+	}
+}

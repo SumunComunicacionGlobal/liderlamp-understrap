@@ -1,0 +1,45 @@
+@font-face {
+	font-family: 'Urbanist';
+	font-style: italic;
+	font-weight: 400;
+	font-display: auto;
+	src: url('../fonts/Urbanist-italic-400.woff') format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+	font-family: 'Urbanist';
+	font-style: normal;
+	font-weight: 100;
+	font-display: auto;
+	src: url('../fonts/Urbanist-normal-100.woff') format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+	font-family: 'Urbanist';
+	font-style: normal;
+	font-weight: 400;
+	font-display: auto;
+	src: url('../fonts/Urbanist-normal-400.woff') format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+	font-family: 'Urbanist';
+	font-style: normal;
+	font-weight: 700;
+	font-display: auto;
+	src: url('../fonts/Urbanist-normal-700.woff') format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+	font-family: 'Urbanist';
+	font-style: normal;
+	font-weight: 800;
+	font-display: auto;
+	src: url('../fonts/Urbanist-normal-800.woff') format('woff');
+	unicode-range: U+0-10FFFF;
+}
+

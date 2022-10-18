@@ -1,0 +1,5 @@
+.wp-block-separator.is-style-vertical {
+    width: 120px;
+    transform: rotate( 90deg );
+    margin: 80px auto;
+}

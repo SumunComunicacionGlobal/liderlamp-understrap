@@ -1,0 +1,56 @@
+$theme-colors: map-remove(
+	$theme-colors,
+	"success",
+	"info",
+	"warning",
+	"danger"
+);
+
+$grays: map-remove(
+	$grays,
+	"100",
+	"200",
+	"300",
+	"400",
+	"500",
+	"600",
+	"700",
+	"800",
+	"900"
+);
+
+$colors: map-remove(
+	$colors,
+	"blue",
+	"indigo",
+	"purple",
+	"pink",
+	"red",
+	// "yellow",
+	"green",
+	"teal",
+	"cyan",
+	// "white",
+	"gray",
+	"gray-dark"
+);
+
+$spacers: map-remove(
+	$spacers,
+	// 1,
+	// 2,
+	3,
+	4,
+	5
+);
+
+$sizes: map-remove(
+	$sizes,
+	25,
+	50,
+	75,
+	100,
+	auto
+);
+
+
