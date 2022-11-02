@@ -280,18 +280,20 @@ if ( ! function_exists( 'understrap_entry_footer' ) ) {
      */
     function understrap_entry_footer() {
         // Hide category and tag text for pages.
-        if ( 'post' === get_post_type() ) {
+        
+        if ( is_singular( 'post' ) ) {
 
             /* translators: used between list items, there is a space after the comma */
             // $categories_list = get_the_category_list( esc_html__( ' | ', 'understrap' ) );
             $categories_list = liderlamp_get_the_term_list( get_the_ID(), 'category', '', ' ', '' );
             if ( $categories_list && understrap_categorized_blog() ) {
-                echo '<p class="cat-links">' . strip_tags ( $categories_list, '<span>' ) . '</p>';
+                // echo '<p class="cat-links">' . strip_tags ( $categories_list, '<span>' ) . '</p>';
+                echo '<p class="cat-links">' . $categories_list . '</p>';
             }
 
             $categories_list = liderlamp_get_the_term_list( get_the_ID(), 'post_tag', '', ' ', '' );
             if ( $categories_list && understrap_categorized_blog() ) {
-                echo '<p class="cat-links tag-links">' . strip_tags ( $categories_list, '<span>' ) . '</p>';
+                echo '<p class="cat-links tag-links">' . $categories_list . '</p>';
             }
 
         }
@@ -673,4 +675,18 @@ function liderlamp_productos_relacionados() {
     <?php endif;
 
     wp_reset_postdata();
+}
+
+add_action( 'loop_start', 'archive_loop_start', 10 );
+function archive_loop_start() {
+    if ( is_home() || is_category() || is_tag() ) {
+        echo '<div class="row">';
+    }
+}
+
+add_action( 'loop_end', 'archive_loop_end', 10 );
+function archive_loop_end() {
+    if ( is_home() || is_category() || is_tag() ) {
+        echo '</div>';
+    }
 }

@@ -89,6 +89,7 @@
 .post-side {
 	padding-top: 2rem;
 	padding-bottom: 2rem;
+	margin-bottom: 2px;
 
 	> .row {
 		align-items: center;
@@ -98,7 +99,7 @@
 
 		.wp-post-image {
 			max-height: 500px;
-			object-fit: cover;
+			// object-fit: cover;
 		}
 	}
 
@@ -115,6 +116,12 @@
 
 img[src$=".jpg"] {
 	background-color: lighten( $gray-200, .3);
+}
+
+img.vertical-post-image {
+	height: 420px;
+	object-fit: cover;
+	border-radius: $border-radius-lg;
 }
 
 .image-right .post-side > .row {
@@ -290,6 +297,19 @@ img[src$=".jpg"] {
 			padding-bottom: 2rem;
 		}
 	}
+}
+
+body {
+
+	&.blog,
+	&.category,
+	&.tag {
+
+		#content {
+			max-width: 960px;
+		}
+	}
+
 }
 
 /* ZEM related posts */

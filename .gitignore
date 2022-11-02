@@ -13,3 +13,11 @@ dist-product
 npm-debug.log
 
 /vendor/
+
+.DS_Store
+
+._.DS_Store
+
+/src/build/browser-sync.config.js
+
+gulpconfig.json
