@@ -2509,6 +2509,8 @@ article.testimonio {
 		&#backinstock_textbox {
 			border-top-right-radius: 0;
 			border-bottom-right-radius: 0;
+			width: calc(100% - 96px);
+			max-width: 240px;
 		}
 	}
 
@@ -2644,3 +2646,9 @@ article.testimonio {
 }
 /***/
 
+/* WPC Variations Radio Buttons */
+.dd-desc {
+	display: flex !important;
+	align-items: baseline;
+}
+/***/

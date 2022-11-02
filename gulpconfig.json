@@ -1,6 +1,6 @@
 {
   "browserSyncOptions" : {
-    "proxy": "localhost/latrastiendadeliderlamp/",
+    "proxy": "localhost/liderlamp/",
     "notify": false,
 	"files": ["./css/*.min.css", "./js/*.min.js", "./**/*.php"]
   },
