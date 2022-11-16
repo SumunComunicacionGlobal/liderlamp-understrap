@@ -65,6 +65,13 @@ function show_template() {
 
 }
 
+if( !function_exists( 'sumun_unregister_post_type' ) ) {
+    function sumun_unregister_post_type(){
+        unregister_post_type( 'rl_gallery' );
+    }
+}
+add_action('init','sumun_unregister_post_type', 100);
+
 add_action( 'wp_footer', 'script_pinterest' );
 function script_pinterest() {
 
