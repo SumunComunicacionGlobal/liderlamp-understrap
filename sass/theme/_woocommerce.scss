@@ -29,15 +29,17 @@
 #add_payment_method #payment, 
 .woocommerce-cart #payment, 
 .woocommerce-checkout #payment,
-.woocommerce-account-fields {
+.woocommerce-account-fields,
+.woocommerce-Address {
     background-color: $light;
-    border: $card-border-width solid $card-border-color;
+    // border: $card-border-width solid $card-border-color;
+    box-shadow: $box-shadow-sm;
     border-radius: $card-border-radius;
     padding: $spacer;
     margin-bottom: $grid-gutter-width;
 
     h3 {
-        font-size: $h4-font-size;
+        font-size: $h5-font-size;
     }
 
 }
@@ -60,3 +62,56 @@
     }
 }
 
+.woocommerce-account {
+
+    .woocommerce-MyAccount-content,
+    .woocommerce-MyAccount-navigation {
+		margin-bottom: 2rem;
+        background-color: $light;
+        padding: $spacer;
+        border-radius: $border-radius;
+    }
+
+    #page-wrapper,
+    #wrapper-breadcrumbs { 
+        
+        > .container {
+            max-width: 1440px;
+        }
+
+    }
+
+	.woocommerce-MyAccount-navigation {
+
+        .list-group-item {
+            border: 0;
+            border-color: $card-border-color;
+
+            &:not(.is-active) {
+                background-color: transparent;
+            } 
+        }
+
+		.list-group-item:last-child {
+			background-color: $black;
+			color: $white;
+			text-align: center;
+			margin-top: $spacer;
+			transition: $btn-transition;
+
+			&:hover {
+				background-color: $dark;
+			}
+		}
+
+	}
+
+	fieldset {
+		margin: $spacer*2 0;
+	}
+
+}
+
+.woocommerce tbody button.button {
+    @extend .btn-sm;
+}

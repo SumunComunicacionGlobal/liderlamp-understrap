@@ -1376,41 +1376,11 @@ li.wc-block-grid__product {
 }
 
 .list-group-item {
-	border-left: 0;
-	border-right: 0;
+	font-size: $font-size-sm;
 	text-transform: uppercase;
 }
 
-.woocommerce-account {
 
-	.woocommerce-MyAccount-navigation {
-		margin-bottom: 2rem;
-
-		.list-group-item:last-child {
-			background-color: $black;
-			color: $white;
-			text-align: center;
-			margin-top: $spacer;
-			transition: $btn-transition;
-
-			&:hover {
-				background-color: $dark;
-			}
-		}
-
-	}
-
-	.woocommerce-Address {
-		border: 1px solid $gray-300;
-		padding: $spacer*2 $spacer;
-		margin-bottom: $spacer * 1.5;
-	}
-
-	fieldset {
-		margin: $spacer*2 0;
-	}
-
-}
 
 #customer_login {
 
