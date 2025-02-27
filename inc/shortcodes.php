@@ -79,8 +79,28 @@ function get_carrusel_categoria( $atts ) {
     $subterms = array();
 
     foreach ($categorias_ids as $term_id ) {
-        $subterms_temp = get_terms( array( 'taxonomy' => $taxonomy, 'parent' => $term_id ) );
-        if ( $subterms_temp ) {
+
+        $subterms_temp = get_terms( 
+            array( 
+                'taxonomy' => $taxonomy, 
+                'parent' => $term_id,
+                'meta_query'        => array(
+                    'relation' => 'OR',
+                    array(
+                        'key'       => 'hide_term',
+                        'value'     => 1,
+                        'compare'   => '!=',
+                    ),
+                    array(
+                        'key'       => 'hide_term',
+                        'compare'   => 'NOT EXISTS',
+                    )
+            )
+
+            ) 
+        );
+
+        if ( $subterms_temp && !is_wp_error( $subterms_temp ) ) {
             $subterms = array_merge( $subterms, $subterms_temp );
         }
         
@@ -223,3 +243,10 @@ if ( !function_exists( 'year_shortcode' ) ) {
     add_shortcode('year', 'year_shortcode');
 
 }
+
+function faqs_productos() {
+    ob_start();
+    get_template_part( 'global-templates/faqs-productos' );
+    return ob_get_clean();
+}
+add_shortcode( 'faqs_productos', 'faqs_productos' );

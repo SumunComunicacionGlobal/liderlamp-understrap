@@ -77,6 +77,18 @@ if ( ! function_exists( 'understrap_widgets_init' ) ) {
 
 		register_sidebar(
 			array(
+				'name'          => __( 'Quiero que me lo regalen', 'liderlamp' ),
+				'id'            => 'quiero-que-me-lo-regalen',
+				'description'   => __( 'Añade un desplegable en la ficha de producto para mostrar un formulario de contacto', 'understrap' ),
+				'before_widget' => '<div id="%1$s" class="%2$s">',
+				'after_widget'  => '</div><!-- .widget -->',
+				'before_title'  => '<p class="widget-title">',
+				'after_title'   => '</p>',
+			)
+		);
+
+		register_sidebar(
+			array(
 				'name'          => __( 'Prefooter WooCommerce', 'understrap' ),
 				'id'            => 'woocommerce-prefooter',
 				'description'   => __( 'Aparece antes del footer en las fichas de producto, categorías y página de inicio', 'understrap' ),

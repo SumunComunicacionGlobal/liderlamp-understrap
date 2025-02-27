@@ -93,7 +93,9 @@ class BootstrapNavMenuWalker extends Walker_Nav_Menu
     //v($element);
     if ( !$element )
     return;
-     
+
+    if ( !$depth ) $depth = 0;
+
     $id_field = $this->db_fields['id'];
      
     //display this element

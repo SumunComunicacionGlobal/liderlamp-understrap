@@ -25,15 +25,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php /* translators: %s: Customer first name */ ?>
-<p><b><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></b><br>
+<h2 style="text-align: center;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></h2>
 
-<b><?php _e( "Muchas gracias por dejar que Liderlamp te inspire e ilumine", "liderlamp" ); ?></b></p>
+<p><?php _e( "🎉 <b>¡Muchas gracias por dejar que Liderlamp te inspire e ilumine!.</b> Nos ponemos manos a la obra para que puedas disfrutar de tu pedido lo antes posible. 💡", "liderlamp" ); ?></p>
 
-<p><?php _e( "Nos ponemos con ello inmediatamente para que puedas recibirlo cuanto antes. Necesitamos tomarnos un poco de tiempo, que se traduce en mimo y empeño por prepararlo todo teniendo en cuenta hasta el último detalle. Que recibas tu compra en las mejores condiciones nos importa mucho.", "liderlamp" ); ?></p>
+<p><?php _e( "📦 <b>Información Importante sobre tu Pedido</b>: Si tu pedido incluye productos con diferentes fechas de entrega, enviaremos todo junto en la fecha más tardía. Te enviaremos un correo electrónico en cuanto tu pedido esté en camino.", "liderlamp" ); ?></p>
 
-<p><?php _e( "En cuanto lo tengamos listo recibirás un mail avisándote de que tu pedido está en camino.", "liderlamp" ); ?></p>
+<p><?php _e( "📧 <b>Importante: Seguimiento y Factura</b>: Recibirás automáticamente el seguimiento y la factura de tu pedido desde nuestro sistema. Por favor, revisa tu bandeja de spam para asegurarte de que recibes toda la información necesaria sin contratiempos. Si no encuentras los correos o tienes cualquier duda, no dudes en contactarnos.", "liderlamp" ); ?></p>
 
-<p><?php _e( "<b>Por favor, revisa la dirección y código postal de entrega</b> para asegurarte de que todo es correcto y si tienes alguna duda, no dudes en escribirnos ", "liderlamp" ); ?></p>
+<p><?php _e( "🏠 <b>Verifica tu Dirección de Envío</b>: Por favor, revisa la dirección y el código postal que nos has proporcionado para la entrega. Es esencial que estos detalles sean correctos para evitar cualquier retraso. Si encuentras algún error o tienes alguna pregunta, no dudes en contactarnos. Estamos aquí para ayudarte.", "liderlamp" ); ?></p>
+
+<p><?php _e( '📲 <b>Mantente Conectado</b>: No te pierdas las últimas tendencias, inspiración diaria y novedades. ¡Síguenos en Instagram y sé parte de nuestra creciente comunidad! <a href="https://www.instagram.com/liderlamp/" target="_blank">Haz clic aquí para seguirnos</a>.', 'liderlamp' ); ?></p><br>
 
 <?php
 

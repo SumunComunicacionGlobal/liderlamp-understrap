@@ -4,6 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define('EDITORIALES_ID', 567);
+define('QUIERO_QUE_ME_LO_REGALEN_ID', 63237);
+define('NOVEDADES_ID', 113 );
+define('BAJA_ID', 604 );
+define('SIN_DESCUENTO_ID', 334 );
+define('VENTA_PRIVADA_ID', 532 );
+define('SIN_CATEGORIA_ID', 241 );
+define('COLECCION_REBAJAS_ID', 630 );
 
 require_once( 'inc/wp-bootstrap-collapse-navwalker.php' );
 require_once( 'inc/liderlamp-widgets.php' );
@@ -79,6 +86,39 @@ function script_pinterest() {
 
     echo '<script async defer src="//assets.pinterest.com/js/pinit.js"></script>';
 }
+
+// add_action( 'wp_footer', 'liderlamp_tell_cf7_page_is_not_cached' );
+function liderlamp_tell_cf7_page_is_not_cached() { ?>
+
+    <script>  
+        wpcf7.cached = 0; 
+    </script>
+
+<?php }
+
+/*
+ * Disable CF7 Refill
+ */
+function aa_disable_wpcf7_refill() {
+	global $wp_scripts;
+	$handle      = 'contact-form-7';
+	$object_name = 'wpcf7';
+	$data        = $wp_scripts->get_data( $handle, 'data' );
+	if ( ! empty( $data ) ) {
+		if ( ! is_array( $data ) ) {
+			$data = json_decode( str_replace( 'var ' . $object_name . ' = ', '', substr( $data, 0, - 1 ) ), true );
+		}
+		foreach ( $data as $key => $value ) {
+			$localized_data[ $key ] = $value;
+		}
+		unset($localized_data['cached']);
+		$wp_scripts->add_data( $handle, 'data', '' );
+		wp_localize_script( $handle, $object_name, $localized_data );
+	}
+}
+
+add_action( 'wpcf7_enqueue_scripts', 'aa_disable_wpcf7_refill' );
+
 
 function be_gutenberg_scripts() {
     wp_enqueue_script( 'sumun-editor', get_stylesheet_directory_uri() . '/js/editor.js', array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ), filemtime( get_stylesheet_directory() . '/js/editor.js' ), true );
@@ -407,7 +447,13 @@ function liderlamp_posts_relacionados() {
                             ),
             'posts_per_page' => 4,
             'post__not_in' => array( $current_post_id ),
-            'orderby' => array( 'title' => 'ASC', 'date' => 'DESC' )
+            'orderby' => array( 'title' => 'ASC', 'date' => 'DESC' ),
+            // 'date_query' => array(
+            //                     array(
+            //                         'column' => 'post_date_gmt',
+            //                         'after'  => '1 year ago',
+            //                     )
+            //                 ),
         );
 
         if ( has_category( EDITORIALES_ID ) ) {
@@ -697,3 +743,39 @@ function archive_loop_end() {
         echo '</div>';
     }
 }
+
+add_filter( 'get_terms', 'liderlamp_hide_term', 10, 4 );
+function liderlamp_hide_term( $terms, $taxonomies, $args, $term_query ) {
+
+    if ( is_admin() ) return $terms;
+
+    remove_filter( 'get_terms', 'liderlamp_hide_term' );
+
+    $exclude = get_terms( array(
+        'hide_empty'        => false,
+        'fields'            => 'ids',
+        'meta_query'        => array(
+                                array(
+                                    'key'       => 'hide_term',
+                                    'value'     => 1
+                                ),
+                            )
+    ) );
+
+    add_filter( 'get_terms', 'liderlamp_hide_term', 10, 4 );
+
+    foreach( $terms as $key => $term ) {
+
+        if ( ! is_a( $term, 'WP_Term' ) ) {
+            continue;
+        }
+
+        $term_id = $term->term_id;
+        if ( in_array( $term_id, $exclude ) ) unset ( $terms[$key] );
+
+    }
+
+    return $terms;
+
+}
+

@@ -3,11 +3,11 @@
 @import "../src/sass/understrap/understrap/understrap";  // <------- Loads the UnderStrap defaults. Just a few classes to incorporate BS in WP
 @import "../src/sass/understrap/understrap/woocommerce"; // <------- Loads WooCommerce style fixes. Comment out if you aren't using WooCommerce
 
-// Optional files - If you don´t use the corresponding scripts/fonts comment em out
-//@import "assets/font-awesome";                           // <------- Font Awesome Icon font
+// // Optional files - If you don´t use the corresponding scripts/fonts comment em out
+// //@import "assets/font-awesome";                           // <------- Font Awesome Icon font
 @import "assets/underscores";                            // <------- Underscores media styles
 
-// Any additional imported files //
+// // Any additional imported files //
 @import "../fonts/google_fonts";
 @import "theme/slick";
 @import "theme/slick-theme";
@@ -15,3 +15,4 @@
 @import "theme/child_theme";                             // <------- Add your styles into this file
 // @import "../src/sass/understrap/theme/contact-form7";    // <------- Loads some basic styling for contact form 7 plugin
 @import "theme/media_queries";
+@import "theme/woocommerce";

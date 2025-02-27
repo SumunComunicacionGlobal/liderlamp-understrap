@@ -11,6 +11,13 @@
 	text-align: center;
 	z-index: 100;
 	position: relative;
+	font-size: $font-size-sm;
+	padding: .25rem;
+	height: 31px;
+
+	p {
+		margin-bottom: 0;
+	}
 
 	a {
 		color: $white;
@@ -355,14 +362,6 @@ p.has-text-align-center:not(.has-large-font-size) {
 	margin-left: auto;
 	margin-right: auto;
 }
-#top-bar {
-	font-size: $font-size-sm;
-	padding: .25rem;
-
-	p {
-		margin-bottom: 0;
-	}
-}
 h1 {
 	font-weight: $font-weight-lighter;
 	text-transform: uppercase;
@@ -383,6 +382,7 @@ h1 {
 }
 
 h1.product_title {
+	clear: both !important;
 	margin-bottom: .6em;
 	font-size: 2rem;
 	text-align: left;
@@ -1000,6 +1000,7 @@ li.wc-block-grid__product {
 	}
 
 	div.product div.images {
+		margin-bottom: $spacer * 3;
 
 		.flex-control-thumbs,
 		.flex-control-paging {
@@ -1042,6 +1043,7 @@ li.wc-block-grid__product {
 		}
 
 		ul.flex-direction-nav {
+			overflow: hidden;
 			position: absolute;
 			top: 50%;
 			transform: translateY(-50%);
@@ -1130,10 +1132,18 @@ li.wc-block-grid__product {
 		.liderlamp-compartir {
 			position: absolute;
 			// bottom: 0;
-			top: calc( 100% - 38px );
+			top: calc(100% + 4px);
 			right: 0;
 			width: 50%;
 			text-align: right;
+			z-index: 1;
+			min-width: 180px;
+			display: flex;
+			justify-content: flex-end;
+
+			@include media-breakpoint-up(md) {
+				top: calc( 100% - 30px );
+			}
 
 			> div {
 				display: inline-block;
@@ -1602,6 +1612,23 @@ li.wc-block-grid__product {
 // 		right: 20px;
 // 	}
 // }
+.single-product .liderlamp-compartir {
+	gap: 4px;
+	
+	.tinv-wishlist .tinvwl_add_to_wishlist_button.tinvwl-icon-heart {
+	
+		&.no-txt {
+			width: 32px;
+			height: 32px;
+		}
+
+		&:before {
+			font-size: 33px;
+		}
+
+	}
+
+}
 /***/
 
 /* Tablas */
@@ -1884,9 +1911,10 @@ li.wc-block-grid__product {
 
 	.nav-icons {
 
-		a:not(:first-child) {
-			margin-left: .9rem;
-		}
+		display: flex;
+		gap: .9rem;
+		justify-content: flex-end;
+
 		img {
 			max-height: 20px;
 			width: auto;
@@ -2614,6 +2642,13 @@ article.testimonio {
 
 }
 
+.collapse--calculator {
+
+	input {
+		width: 100%;
+	}
+}
+
 .select2-container--default .select2-selection--single {
 	border-radius: 0;
 	border-color: $input-border-color;
@@ -2652,3 +2687,13 @@ article.testimonio {
 	align-items: baseline;
 }
 /***/
+
+/* Youtube shorts */
+#swipebox-slider .slide .swipebox-video-container .swipebox-video {
+	padding-bottom: 177.77%;
+}
+/***/
+
+.rank-math-list-item {
+    margin-bottom: 2rem;
+}

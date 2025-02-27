@@ -9,8 +9,20 @@
 defined( 'ABSPATH' ) || exit;
 
 $image_size = 'large';
-if ( 'slide' == get_post_type() ) {
-	$image_size = 'woocommerce_single';
+$post_type = get_post_type();
+
+switch ($post_type) {
+	case 'slide':
+		$image_size = 'medium_large';
+		break;
+	
+	case 'banner':
+		$image_size = 'full';
+		break;
+		
+	default:
+		$image_size = 'large';
+	break;
 }
 ?>
 

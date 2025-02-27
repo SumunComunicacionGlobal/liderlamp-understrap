@@ -1,0 +1,62 @@
+:root {
+    --woocommerce: #{primary};
+    --wc-green: #{$green};
+    --wc-red: #{$red};
+    --wc-orange: #{$orange};
+    --wc-blue: #{$blue};
+    --wc-primary: #{$primary};
+    --wc-primary-text: #{$white};
+    --wc-secondary: #{$secondary};
+    --wc-secondary-text: #515151;
+    --wc-highlight: #{$primary};
+    --wc-highligh-text: #{$white};
+    --wc-content-bg: #{$white};
+    --wc-subtext: #767676;
+    --wc-form-border-color: #{$input-border-color};
+    --wc-form-border-radius: #{$input-border-radius};
+    --wc-form-border-width: #{$input-border-width};
+
+    // --wc-form-color-background: #{$light};
+}
+
+
+.woocommerce-billing-fields,
+.woocommerce-shipping-fields,
+.woocommerce-additional-fields,
+.woocommerce form.checkout_coupon, 
+.woocommerce form.login, 
+.woocommerce form.register,
+#add_payment_method #payment, 
+.woocommerce-cart #payment, 
+.woocommerce-checkout #payment,
+.woocommerce-account-fields {
+    background-color: $light;
+    border: $card-border-width solid $card-border-color;
+    border-radius: $card-border-radius;
+    padding: $spacer;
+    margin-bottom: $grid-gutter-width;
+
+    h3 {
+        font-size: $h4-font-size;
+    }
+
+}
+
+.woocommerce table.shop_table {
+    border-collapse: collapse;
+}
+
+
+.woocommerce form .form-row {
+    margin-bottom: $paragraph-margin-bottom;
+
+    .input-text,
+    select {
+        padding: $input-padding-y $input-padding-x;
+    }
+
+    label {
+        margin-bottom: 0;
+    }
+}
+

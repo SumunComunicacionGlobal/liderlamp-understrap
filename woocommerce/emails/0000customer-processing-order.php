@@ -1,8 +1,8 @@
 <?php
 /**
- * Customer completed order email
+ * Customer processing order email
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/emails/customer-completed-order.php.
+ * This template can be overridden by copying it to yourtheme/woocommerce/emails/customer-processing-order.php.
  *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
@@ -22,18 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /*
  * @hooked WC_Emails::email_header() Output the email header
  */
-do_action( 'woocommerce_email_header', __( 'Tu pedido se ha completado', 'liderlamp' ), $email ); ?>
+do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php /* translators: %s: Customer first name */ ?>
-<h2 style="text-align:center;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></h2>
+<p><b><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></b><br>
 
-<p><?php _e( '<b>Hemos terminado de preparar tu pedido.</b> Pronto recibirás los detalles de seguimiento desde nuestro sistema. 📧 <b>Por favor, revisa tu bandeja de spam</b> 📬 para asegurarte de que no te pierdas esta información importante.', 'liderlamp' ); ?></p>
+<b><?php _e( "Muchas gracias por dejar que Liderlamp te inspire e ilumine", "liderlamp" ); ?></b></p>
 
-<p><?php _e( "🚚 <b>Revisión Importante al Recibir:</b> Tenemos que pedirte un favor: <b>Te rogamos que en el plazo de 24H compruebes la mercancía</b> (incluidas las bombillas, si las lleva). Esto es muy importante, porque cualquier reclamación por rotura o desperfecto sufrido en el transporte debe hacerse en las 24H. siguientes a su recepción. Pasado este plazo no podremos hacernos cargo de la incidencia, por eso es tan importante que puedas asegurarte de su estado cuando lo recibas.", "liderlamp" ); ?></p>
+<p><?php _e( "Nos ponemos con ello inmediatamente para que puedas recibirlo cuanto antes. Necesitamos tomarnos un poco de tiempo, que se traduce en mimo y empeño por prepararlo todo teniendo en cuenta hasta el último detalle. Que recibas tu compra en las mejores condiciones nos importa mucho.", "liderlamp" ); ?></p>
 
-<p><?php _e( "📸 <b>Comparte tu Experiencia:</b> ¡Nos encantará ver cómo luce tu compra! Si te animas a compartir una foto en Instagram, no olvides etiquetarnos con @liderlamp. ¡Estamos deseosos de ver tu creatividad en acción! 😍", "liderlamp" ); ?></p>
+<p><?php _e( "En cuanto lo tengamos listo recibirás un mail avisándote de que tu pedido está en camino.", "liderlamp" ); ?></p>
 
-<p><b><?php _e( "Muchísimas gracias por dejar que Liderlamp te inspire e ilumine", "liderlamp" ); ?></b></p>
+<p><?php _e( "<b>Por favor, revisa la dirección y código postal de entrega</b> para asegurarte de que todo es correcto y si tienes alguna duda, no dudes en escribirnos ", "liderlamp" ); ?></p>
 
 <?php
 

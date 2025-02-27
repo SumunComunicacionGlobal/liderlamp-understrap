@@ -68,22 +68,21 @@ $container = get_theme_mod( 'understrap_container_type' );
 
 				<?php
 					$wishlist_options = get_option( 'tinvwl-general', false );
-					// echo '<pre>'; print_r($wishlist_options); echo '</pre>';
 					$contacto_id = get_theme_mod( 'contacto_id' );
 				?>
 				<div class="nav-icons">
 
-					<a href="#search-collapse" data-toggle="collapse" title="<?php echo __( 'Search' ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/search.svg" alt="<?php echo __( 'Search' ); ?>"></a>
+					<a href="#search-collapse" data-toggle="collapse" title="<?php echo __( 'Search' ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/search.svg" alt="<?php echo __( 'Search' ); ?>" width="20" height="20"></a>
 
 					<?php if ( class_exists( 'WooCommerce') ) { ?>
 
-						<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php echo get_the_title( get_option('woocommerce_myaccount_page_id') ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/login.svg" alt="<?php echo __( 'Search' ); ?>"></a>
+						<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php echo get_the_title( get_option('woocommerce_myaccount_page_id') ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/login.svg" alt="<?php echo __( 'Login' ); ?>" width="19" height="20"></a>
 
 					<?php } ?>
 
 					<?php if ( is_plugin_active( 'ti-woocommerce-wishlist/ti-woocommerce-wishlist.php' ) ) { ?>
 						
-						<a href="<?php echo get_permalink( $wishlist_options['page_wishlist'] ); ?>" title="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/like.svg" alt="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>"></a>
+						<a href="<?php echo get_permalink( $wishlist_options['page_wishlist'] ); ?>" title="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/like.svg" alt="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>" width="21" height="20"></a>
 
 					<?php } ?>
 
@@ -91,7 +90,7 @@ $container = get_theme_mod( 'understrap_container_type' );
 
 						$items_count = WC()->cart->get_cart_contents_count(); ?>
 
-						<a href="<?php echo get_permalink( wc_get_page_id( 'cart' ) ); ?>" title="<?php echo get_the_title( wc_get_page_id( 'cart' ) ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/shop.svg" alt="<<?php echo get_the_title( wc_get_page_id( 'cart' ) ); ?>">
+						<a href="<?php echo get_permalink( wc_get_page_id( 'cart' ) ); ?>" title="<?php echo get_the_title( wc_get_page_id( 'cart' ) ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/shop.svg" alt="<<?php echo get_the_title( wc_get_page_id( 'cart' ) ); ?>" width="16" height="20">
 
     						<span class="cart-count"><?php echo $items_count ? $items_count : ''; ?></span>
 

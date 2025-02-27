@@ -73,7 +73,7 @@ echo '<div class="row">';
                         echo '<div class="wp-post-image-wrapper">';
 
                             if ( has_post_thumbnail() ) {
-                                the_post_thumbnail( 'woocommerce_thumbnail' );
+                                the_post_thumbnail( 'medium_large' );
                             } else {
                                 echo wc_placeholder_img( 'woocommerce_thumbnail' );
                             }

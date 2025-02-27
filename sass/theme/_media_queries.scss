@@ -478,7 +478,7 @@
 		font-size: $font-size-base * 1.5;
 	}
 
-	form button:not([name="add-to-cart"]),
+	// form button:not([name="add-to-cart"]),
 	#coupon_code.input-text {
 		width: 100% !important;
 	}
@@ -522,14 +522,14 @@
 	}
 
 
-	.woocommerce .woocommerce-error .button, 
-	.woocommerce .woocommerce-info .button, 
-	.woocommerce .woocommerce-message .button, 
-	.woocommerce-page .woocommerce-error .button, 
-	.woocommerce-page .woocommerce-info .button, 
-	.woocommerce-page .woocommerce-message .button {
+	// .woocommerce .woocommerce-error .button, 
+	// .woocommerce .woocommerce-info .button, 
+	// .woocommerce .woocommerce-message .button, 
+	// .woocommerce-page .woocommerce-error .button, 
+	// .woocommerce-page .woocommerce-info .button, 
+	// .woocommerce-page .woocommerce-message .button {
 
-	}
+	// }
 
 	.woocommerce,
 	.woocommerce-page {

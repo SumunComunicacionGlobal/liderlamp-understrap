@@ -402,7 +402,7 @@ function liderlamp_subcategorias_loop() {
 
 // Fuerza el modo de visualización de categorías de producto a "solo productos", ya que las subcategorías las mostramos más arriba de forma dinámica
 add_filter( 'get_term_metadata', 'liderlamp_set_category_display', 10, 4 );
-function liderlamp_set_category_display( $value = null, $object_id, $meta_key, $single ){
+function liderlamp_set_category_display( $value, $object_id, $meta_key, $single ){
 
     if( 'display_type' === $meta_key ) {
         $display_type = 'products';
@@ -418,6 +418,7 @@ add_filter( 'get_terms', 'ts_get_subcategory_terms', 10, 3 );
 function ts_get_subcategory_terms( $terms, $taxonomies, $args ) {
     $new_terms = array();
     // if it is a product category and on the shop page
+    if ( !$taxonomies || !is_array( $terms ) ) return $terms;
     if ( in_array( 'product_cat', $taxonomies ) && !is_admin() && is_tax() ) {
 
 
@@ -529,6 +530,10 @@ add_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 20 )
 // add_action( 'woocommerce_before_subcategory', $category );
 
 function woocommerce_template_loop_category_link_open( $category ) { 
+    if ( is_wp_error( $category ) || !is_a( $category, 'WP_Term' ) ) {
+        return false;
+    }
+
     if ( is_tax( 'product_cat' ) && 'estilo' == $category->taxonomy ) {
         $link = get_term_link( get_queried_object() );
         $link = add_query_arg( 'estilo', $category->slug, $link );
@@ -586,14 +591,14 @@ function liderlamp_mi_cuenta_menu_items( $items ) {
     if ( isset($items['downloads']) ) $items['downloads'] = __( 'Tus descargas', 'liderlamp' );
     $items['edit-address'] = __( 'Tus direcciones', 'liderlamp' );
     $items['edit-account'] = __( 'Tus datos de acceso', 'liderlamp' );
-    $items['tinv_wishlist'] = __( 'Tu lista de deseos', 'liderlamp' );
+    // $items['tinv_wishlist'] = __( 'Tu lista de deseos', 'liderlamp' );
     $items['customer-logout'] = __( 'Cerrar sesión', 'liderlamp' );
 
-    $my_items = array(
+    //$my_items = array(
     //  endpoint   => label
-        '2nd-item' => __( '2nd Item', 'my_plugin' ),
-        '3rd-item' => __( '3rd Item', 'my_plugin' ),
-    );
+    //    '2nd-item' => __( '2nd Item', 'my_plugin' ),
+    //    '3rd-item' => __( '3rd Item', 'my_plugin' ),
+    //);
 
     // $my_items = array_slice( $items, 0, 1, true ) +
     //     $my_items +
@@ -602,7 +607,7 @@ function liderlamp_mi_cuenta_menu_items( $items ) {
     return $items;
 }
 
-add_filter( 'woocommerce_add_to_cart_fragments', 'wc_refresh_mini_cart_count');
+// add_filter( 'woocommerce_add_to_cart_fragments', 'wc_refresh_mini_cart_count');
 function wc_refresh_mini_cart_count($fragments){
     ob_start();
     $items_count = WC()->cart->get_cart_contents_count();
@@ -611,6 +616,13 @@ function wc_refresh_mini_cart_count($fragments){
     <?php
         $fragments['.cart-count'] = ob_get_clean();
     return $fragments;
+}
+
+/** Desactiva llamadas Ajax de WooCommerce*/
+add_action( 'wp_enqueue_scripts', 'dequeue_woocommerce_cart_fragments', 11);
+function dequeue_woocommerce_cart_fragments() {
+    // if (is_front_page() || is_single() ) 
+        wp_dequeue_script('wc-cart-fragments');
 }
 
 // Muestra solo productos de la subcategoría actual, no de las hijas (solo en las categorías de primer nivel)
@@ -660,20 +672,24 @@ function liderlamp_woocommerce_taxonomy_description() {
                 <div class="row liderlamp-product-cat-description">
                     
                     <div class="col-md-6 col-xl-5 mb-1">
-
-                        <?php echo '<div class="slider-destacados">';
-
-                            echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_single', false, '' ); ?>
                             
                             <?php if ( $galeria ) {
+
+                                echo '<div class="slider-destacados">';
+
+                                    echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_single', false, '' );
 
                                     foreach ( $galeria as $img_id ) {
                                         echo wp_get_attachment_image( $img_id, 'woocommerce_single', false, '' ); 
                                     }
 
-                            } 
+                                echo '</div>';
 
-                        echo '</div>'; ?>
+                            } else {
+
+                                echo wp_get_attachment_image( $thumbnail_id, 'woocommerce_single', false, '' );
+
+                            } ?>
 
                     </div>
 
@@ -798,7 +814,67 @@ function liderlamp_remove_product_tabs( $tabs ) {
   return $tabs;
 }
 
-add_filter( 'woocommerce_product_tabs', 'quiero_que_me_lo_regalen_tab' );
+function smn_get_product_faqs() {
+
+    $faqs = array();
+
+    global $post;
+    $product_faqs = get_field( 'faqs_relacionadas', $post );
+    if ( $product_faqs ) {
+        $faqs = array_merge( $faqs, $product_faqs );
+    }
+    
+    $product_cats = get_the_terms( $post, 'product_cat' );
+    $term_faqs = array();
+    if ( $product_cats ) {
+        foreach ( $product_cats as $product_cat ) {
+            $term_faqs = get_field( 'faqs_relacionadas', $product_cat );
+            if ( $term_faqs ) {
+                $faqs = array_merge( $faqs, $term_faqs );
+            }
+        }
+    }
+
+    if ( $faqs ) {
+        $faqs = array_unique($faqs, SORT_REGULAR);
+
+        $r = '';
+
+        foreach ( $faqs as $faq ) {
+            $r .= '<h4>' . $faq->post_title . '</h4>';
+            $r .= '<div class="mb-2">';
+                $r .= apply_filters( 'the_content', $faq->post_content );
+            $r .= '</div>';
+        }
+
+        return $r;
+    }
+
+    return false;
+
+}
+
+add_filter('woocommerce_product_tabs', 'liderlamp_add_faqs_tab');
+function liderlamp_add_faqs_tab($tabs) {
+
+    global $post;
+    $faqs = smn_get_product_faqs();
+
+    if ($faqs) {
+        $tabs['faqs'] = array(
+            'title'    => sprintf( __('Preguntas frecuentes sobre %s', 'liderlamp'), esc_html( $post->post_title ) ),
+            'priority' => 50,
+            'callback' => function() use ($faqs) {
+                echo $faqs;
+            }
+        );
+    }
+
+    return $tabs;
+}
+
+
+// add_filter( 'woocommerce_product_tabs', 'quiero_que_me_lo_regalen_tab' );
 function quiero_que_me_lo_regalen_tab( $tabs ) {
     // Adds the new tab
     $tabs['regalo'] = array(
@@ -809,7 +885,15 @@ function quiero_que_me_lo_regalen_tab( $tabs ) {
     return $tabs;
 }
 function quiero_que_me_lo_regalen_tab_callback() {
-    echo do_shortcode( '[contact-form-7 id="8899" title="Quiero que me lo regalen"]' );
+    dynamic_sidebar( 'quiero-que-me-lo-regalen' );
+}
+
+// add_action( 'woocommerce_product_after_tabs', 'liderlamp_quiero_que_me_lo_regalen_button' );
+function liderlamp_quiero_que_me_lo_regalen_button() {
+    global $post;
+    echo '<p class="text-center">';
+        echo '<a target="_blank" rel="noopener noreferrer nofollow noindex" class="btn btn-outline-primary" href="' . get_the_permalink( QUIERO_QUE_ME_LO_REGALEN_ID ) . '?titulo='.$post->post_title.'&texto=' . $post->post_excerpt . '&url=' . get_the_permalink() . '&imagen=' . get_the_post_thumbnail_url( null, 'full' ) . '">' . __( 'Quiero que me lo regalen', 'liderlamp' ) . '</a>';
+    echo '</p>';
 }
 
 add_filter('paginate_links', function($link) {
@@ -1094,23 +1178,43 @@ function liderlamp_youtube_shorts() {
                 $urls_array = explode( PHP_EOL, $urls );
 
                 foreach( $urls_array as $url ) {
-                    $video_ids[] = rtrim( basename( $url ) );
+                    
+                    $url_components = parse_url( $url );
+                    $video_id = false;
+
+                    if ( isset( $url_components['query'] ) ) {
+
+                        parse_str( $url_components['query'], $params );
+
+                        if ( isset( $params['v'] ) ) {
+                            $video_id = $params['v'];
+                        }
+
+                    }
+                    if ( !$video_id ) {
+                        $video_id = rtrim( basename( $url ) );
+                    }
+
+                    if ( $video_id ) {
+                        $video_ids[] = $video_id;
+                    }
+
                 }
 
-                $titulos = get_youtube_titles( $video_ids );
+                // $titulos = get_youtube_titles( $video_ids );
 
                 foreach( $urls_array as $index => $url ) {
 
                     $video_id = basename( $url );
                     $link_url = 'https://www.youtube.com/watch?v=' . $video_id;
-                    $titulo = $titulos[$index];
+                    // $titulo = $titulos[$index];
 
 
                     echo '<a class="story" href="'.$link_url.'" rel="lightbox">';
                         echo '<div class="story-image-wrapper">';
                             echo '<img class="story-image" src="https://img.youtube.com/vi/'.$video_id.'/0.jpg" alt="'.get_the_title().'" />';
                         echo '</div>';
-                        echo '<p class="story-title">'.$titulo.'</p>';
+                        // echo '<p class="story-title">'.$titulo.'</p>';
                     echo '</a>';
 
                 }
@@ -1170,6 +1274,9 @@ function liderlamp_sticker_producto_variable() {
  * @return mixed|string
  */
 function liderlamp_add_sold_out_label_to_wc_product_dropdown( $option, $_, $attribute, $product ){
+
+    if ( !is_singular( 'product' ) ) return $option;
+
     if( is_product() ) {
         global $product;
 
@@ -1187,7 +1294,13 @@ function liderlamp_add_sold_out_label_to_wc_product_dropdown( $option, $_, $attr
     }
     return $option;
   }
-  add_filter( 'woocommerce_variation_option_name', 'liderlamp_add_sold_out_label_to_wc_product_dropdown', 1, 4 );
+
+// Si no lo hago así, la página de la lista de deseos se rompe
+add_action( 'wp_head', 'smn_add_sold_out_label_filter' );
+function smn_add_sold_out_label_filter() {
+    if ( !is_singular('product') ) return;
+    add_filter( 'woocommerce_variation_option_name', 'liderlamp_add_sold_out_label_to_wc_product_dropdown', 10, 4 );
+}
 
   /**
  * Returns the slug of the WooCommerce attribute taxonomy
@@ -1209,4 +1322,475 @@ function liderlamp_wc_get_att_slug_by_title( $attribute_title, $attributes ){
 	}
 
 	return $att_slug;
+}
+
+// add_action( 'wp_enqueue_scripts', 'liderlamp_woocommerce_enqueue_assets' );
+function liderlamp_woocommerce_enqueue_assets() {
+    
+    wp_enqueue_script( 'ajax-quiero-que-me-lo-regalen',  get_stylesheet_directory_uri() . '/js/ajax-quiero-que-me-lo-regalen.js', array( 'jquery' ), '1.0', true );
+    
+    wp_localize_script( 'ajax-quiero-que-me-lo-regalen', 'ajaxquieroquemeloregalen', array(
+        'ajaxurl' => admin_url( 'admin-ajax.php' )
+    ));
+}
+
+
+
+// add_action( 'wp_ajax_nopriv_ajax_quiero_que_me_lo_regalen', 'liderlamp_quiero_que_me_lo_regalen' );
+// add_action( 'wp_ajax_ajax_quiero_que_me_lo_regalen', 'liderlamp_quiero_que_me_lo_regalen' );
+
+function liderlamp_quiero_que_me_lo_regalen() {
+    dynamic_sidebar( 'quiero-que-me-lo-regalen' );
+    die();
+}
+
+// add_action( 'wp_footer', 'liderlamp_ocultar_precio_cuando_se_selecciona_una_variacion_de_producto', 999 );
+function liderlamp_ocultar_precio_cuando_se_selecciona_una_variacion_de_producto() {
+    ?>
+    <script>
+        jQuery(document).ready(function($) {
+            $('.variations_form').on('woocommerce_variation_has_changed', function() {
+                // Ejecutar una acción cuando cambia la variación
+                $('.woocommerce-variation-description').each( function() {
+                    var $description = $(this);
+                    // Reemplazar la etiqueta <p> por <h1>
+                    $description.replaceWith(function() {
+                        return $(this).html().replace(/^<p( [^>]*)?>|<\/p>$/g, '<h1$1>');
+                    });
+                });
+
+            });
+        });
+        
+    </script>
+    <?php
+}
+
+add_filter( 'get_post_metadata', 'liderlamp_custom_google_product_type', 10, 5 );
+function liderlamp_custom_google_product_type( $value, $object_id, $meta_key, $single, $meta_type ) {
+
+    switch ( $meta_key ) {
+        case 'g_product_type_custom':
+            $product_type = smn_get_custom_google_product_type( $object_id );
+            $value = $product_type;
+            break;
+
+        case 'g_product_highlight':
+            global $current_screen;
+            if ( $current_screen && $current_screen->parent_base == 'edit' || !is_admin() ) {
+                return $value;
+            }
+            remove_filter( 'get_post_metadata', 'liderlamp_custom_google_product_type', 10, 5 );
+            $post_meta = get_post_meta( $object_id, $meta_key, $single );
+            add_filter( 'get_post_metadata', 'liderlamp_custom_google_product_type', 10, 5 );
+            $post_meta = explode( PHP_EOL, $post_meta );
+            $post_meta = implode( "</g:product_highlight><g:product_highlight>", $post_meta );
+            $post_meta = html_entity_decode( $post_meta );
+            $value = $post_meta;
+            break;
+        
+        default:
+            return $value;
+            break;
+    }
+
+    
+    return $value;
+    
+}
+
+add_action( 'save_post_product', 'liderlamp_save_custom_google_product_type', 10, 3 );
+function liderlamp_save_custom_google_product_type( $object_id, $post, $update ) {
+
+    $product_type = smn_get_custom_google_product_type( $object_id );
+    update_post_meta( $object_id, 'g_product_type_custom', $product_type );
+
+}
+
+function smn_get_custom_google_product_type( $object_id ) {
+
+    $exclude_cats = array(
+        NOVEDADES_ID,
+        BAJA_ID,
+        SIN_DESCUENTO_ID,
+        VENTA_PRIVADA_ID,
+        SIN_CATEGORIA_ID
+    );
+
+    $estilos_ids = get_terms( array(
+        //'taxonomy'      => 'product_cat',
+        'hide_empty'    => false,
+        'fields'        => 'ids',
+        'meta_query'    => array(
+            array(
+                'key'       => 'es_estilo',
+                'value'     => 1,
+                'type'      => 'BINARY',
+            )
+        )
+    ));
+
+    $exclude_cats = array_merge( $exclude_cats, $estilos_ids );
+
+    $product_cats = wc_get_product_term_ids( $object_id, 'product_cat' );
+    $product_cats_filtered = array_diff( $product_cats, $exclude_cats ); 
+    
+    $primary_cat_id = get_post_meta( $object_id, 'rank_math_primary_product_cat', true );
+    if ( in_array( $primary_cat_id, $estilos_ids ) ) {
+        $primary_cat_id = false;
+    }
+
+    if ( !$primary_cat_id ) {
+        $primary_cat_id = reset( $product_cats_filtered );
+    }
+
+    if( intval( $primary_cat_id ) ) {
+
+        $ancestors = get_ancestors( $primary_cat_id, 'product_cat', 'taxonomy' );
+        $estilos_intersect = array_intersect( $estilos_ids, $product_cats );
+
+        $ancestors = array_reverse( $ancestors );
+        if ( count($ancestors) > 1 ) {
+            // array_pop($ancestors);
+            $ancestors = array( $ancestors[0] );
+        }
+        $ancestors[] = $primary_cat_id;
+
+        if ( $estilos_intersect ) {
+            $primer_estilo = array_shift( $estilos_intersect );
+            $ancestors[] = $primer_estilo;
+        }
+
+        $ancestors_array = [];
+        foreach( $ancestors as $term_id ) {
+            $term = get_term( $term_id );
+            if ( $term_id == $primer_estilo ) {
+                $name = str_replace(
+                    array(
+                        'Lámparas ',
+                        'Lámparas de ',
+                        'Estilo '
+                    ), 
+                    array(
+                        '',
+                        '',
+                        ''
+                    ), 
+                    $term->name
+                );
+                // $ancestors_array[] = sprintf( __( 'Estilo %s', 'liderlamp' ), ucwords($name) );
+                $ancestors_array[] = ucwords($name);
+            } else {
+                $ancestors_array[] = $term->name;
+            }
+        }
+
+        $product_type = implode( ' &gt; ', $ancestors_array );
+        return $product_type;
+        
+    }
+
+}
+
+
+add_action( 'woocommerce_single_product_summary', 'liderlamp_preview_google_product_type', 25 );
+function liderlamp_preview_google_product_type( $title ) {
+    if ( !current_user_can( 'manage_options' ) || !is_main_query() ) return false;
+
+    $product_highlight = get_post_meta( get_the_ID(), 'g_product_highlight', true );
+    if ( $product_highlight ) {
+        echo '<ul>';
+            echo $product_highlight;
+            // echo str_replace( 'g:product_highlight', 'li', $product_highlight );
+        echo '</ul>';
+    }
+
+    $gpt = get_post_meta( get_the_ID(), 'g_product_type_custom', true );
+    if ( $gpt ) {
+       echo '<div class="shadow-sm mb-1 p-1 border"><b>Google Feed Product Type</b> (solo visible para administradores web): <br>' . $gpt . '</div>';
+    }
+
+}
+
+add_filter( 'acf/load_field', 'smn_acf_read_only_field' );
+function smn_acf_read_only_field( $field ) {
+
+    if( 'g_product_type_custom' === $field['name'] ) {
+      $field['disabled'] = true;	
+    }
+  
+    return $field;
+  
+}
+
+// add_action( 'wp_head', 'smn_update_post_meta' );
+function smn_update_post_meta() {
+
+    if ( is_admin() ) return false;
+
+    if ( current_user_can( 'manage_options' ) ) :
+
+        echo '<pre>';
+
+            print_r( 'NO ASUSTARSE, ESTO SOLO LO VEN LOS ADMINISTRADORES' );
+
+
+            $args = array(
+                'post_type'         => 'product',
+                'posts_per_page'    => -1,
+            );
+
+            $q = new WP_Query($args);
+
+            if ( $q->have_posts() ) {
+
+                while ( $q->have_posts() ) { $q->the_post();
+
+                    $product_type = get_post_meta( get_the_ID(), 'g_product_type_custom', true );
+                    print_r( get_the_ID() . ' - ' . get_the_title() . ' - ' . $product_type . '<br>' );
+
+                    if ( !$product_type ) {
+                        // update_post_meta( get_the_ID(), 'g_product_type_custom', '1' );
+                    }
+
+
+                }
+
+            }
+
+            wp_reset_postdata();
+
+        echo '</pre>';
+    endif;
+
+}
+
+add_filter( 'manage_product_posts_columns', 'smn_filter_posts_columns' );
+function smn_filter_posts_columns( $columns ) {
+    $columns['smn_main_product_cat'] = __( 'Cat. Principal' );
+    $columns['g_product_type'] = __( 'Google Product Type' );
+    return $columns;
+}
+
+
+add_action( 'manage_product_posts_custom_column', 'smn_product_column', 10, 2);
+function smn_product_column( $column, $post_id ) {
+  
+    switch ($column) {
+        case 'main_product_cat':
+        case 'smn_main_product_cat':
+                $main_cat_id = get_post_meta( $post_id, 'rank_math_primary_product_cat', true );
+                if ( $main_cat_id ) {
+                    $term = get_term( $main_cat_id );
+                    echo $term->name;
+                }
+            break;
+        
+        case 'g_product_type':
+            echo smn_get_custom_google_product_type( $post_id );
+            break;
+
+        default:
+            # code...
+            break;
+    }
+
+}
+  
+function liderlamp_mostrar_productos_rebajados_en_coleccion_rebajas( $query ) {
+    if ( ! is_admin() && $query->is_main_query() ) {
+
+        if ( $query->is_tax( 'coleccion', COLECCION_REBAJAS_ID ) ) {
+            $sale_products_ids = wc_get_product_ids_on_sale();
+            $products_count = 0;
+            $product_variations_count = 0;
+            foreach( $sale_products_ids as $id) {
+
+                if ( 'product' == get_post_type( $id ) ) {
+                    $products_count++;
+                } else {
+                    $product_variations_count++;
+                }
+            }
+            // echo $products_count . ' productos - ' . $product_variations_count . ' variaciones';
+
+            unset($query->query['coleccion']);
+            unset($query->query_vars['coleccion']);
+            unset($query->tax_query->queries[0]);
+            $query->query_vars['post__in'] = array_merge( array(0), $sale_products_ids);
+
+        }
+    }
+}
+add_action( 'pre_get_posts', 'liderlamp_mostrar_productos_rebajados_en_coleccion_rebajas' );
+
+// Insert a bootsrap4 collapse above the add to cart button for a calculator
+add_action( 'woocommerce_before_add_to_cart_form', 'smn_add_calculator', 10 );
+function smn_add_calculator() {
+
+    $mostrar_calculadora_rollos = get_field( 'mostrar_calculadora_rollos' );
+    if ( !$mostrar_calculadora_rollos ) return false;
+    ?>
+
+    <div class="woocommerce-tabs">
+
+        <div class="card">
+
+            <div class="card-header" id="tab-title-calculator">
+
+                <p class="mb-0">
+
+                    <button class="btn btn-link collapsed" id="tab-button-calculator" data-toggle="collapse" data-target="#tab-calculator" aria-expanded="false" aria-controls="tab-calculator">
+
+                        <?php echo __( '¿Cuántos rollos necesito?', 'liderlamp' ); ?>
+
+                    </button>
+
+                </p>
+
+            </div> <!-- .card-header -->
+
+            <div class="collapse collapse--calculator entry-content" id="tab-calculator" role="tabpanel" aria-labelledby="tab-title-calculator">
+
+               
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-6 mb-1">
+                            <label><?php echo __( 'Longitud (metros)', 'liderlamp' ); ?></label>: 
+                        </div>
+                        <div class="col-6 mb-1">
+                            <input type="number" class="form-control-sm" id="longitud" name="longitud" placeholder="Ej: 10" oninput="calcular()">
+                        </div>
+                        <div class="col-6 mb-1">
+                            <?php echo __( 'Altura (metros)', 'liderlamp' ); ?>: 
+                        </div>
+                        <div class="col-6 mb-1">
+                            <input type="number" class="form-control-sm" id="altura" name="altura" placeholder="Ej: 2,5" oninput="calcular()">
+                        </div>
+                        <div class="col-6 mb-1">
+                            <?php echo __( 'Rollos necesarios', 'liderlamp' ); ?>: 
+                        </div>
+                        <div class="col-6 mb-1">
+                            <input type="text" class="form-control-sm" id="resultado" name="resultado" disabled>
+                        </div>
+                        <?php if ( current_user_can( 'manage_options' ) ) { ?>
+                            <div class="col-6 mb-1">
+                                <?php echo __( 'Resultado exacto (solo admins)', 'liderlamp' ); ?>: 
+                            </div>
+                            <div class="col-6 mb-1">
+                                <input type="text" class="form-control-sm" id="resultado-exacto" name="resultado-exacto" disabled>
+                            </div>
+                       <?php } ?>
+
+                    </div>
+
+                    <script>
+                    function calcular() {
+                        var longitud = document.getElementById('longitud').value * 100;
+                        var altura = document.getElementById('altura').value * 100;
+                        var resultado = Math.ceil( longitud / (1000 / ( altura + 52 ) * 54 ) );
+                        document.getElementById('resultado').value = resultado;
+
+                        <?php if ( current_user_can( 'manage_options' ) ) { ?>
+                            var resultadoExacto = longitud / (1000 / ( altura + 52 ) * 54 );
+                            document.getElementById('resultado-exacto').value = resultadoExacto;
+                       <?php } ?>
+                    }
+                    </script>
+
+
+                </div> <!-- .card-body -->
+
+            </div> <!-- .collapse -->
+
+        </div>
+        
+    </div>
+
+<?php
+}
+
+add_action( 'admin_menu', 'liderlamp_add_submenu_page' );
+function liderlamp_add_submenu_page() {
+    add_submenu_page(
+        'edit.php?post_type=product',
+        'Productos Baja',
+        'Productos Baja',
+        'manage_options',
+        'liderlamp-product-options',
+        'liderlamp_product_options_page'
+    );
+}
+
+function liderlamp_product_options_page() {
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => -1,
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field'    => 'slug',
+                'terms'    => 'productos-baja',
+            ),
+        ),
+    );
+
+    $products = new WP_Query( $args );
+
+    echo '<h1>Redirecciones de los productos en la categoría "productos-baja" a sus categorías de producto primarias</h1>';
+
+    echo '<p>Si el producto no tiene establecida una categoría primaria, se redirige a la primera categoría que no sea "productos-baja" o "novedades".</p>';
+    if ( $products->have_posts() ) {
+
+        echo '<p>Estas redirecciones hay que copiarlas al archivo .htaccess de la web.</p>';
+
+        echo '<p>Para editar el archivo .htaccess, accede a la raíz de la web mediante FTP y edita el archivo .htaccess con un editor de texto. Al final del archivo, pega las redirecciones.</p>';
+
+        echo '<p>También puedes editar el archivo .htaccess <a href="https://liderlamp.es/wp-admin/admin.php?page=rank-math-options-general" target="_blank">desde aquí</a>.</p>';
+        
+        echo '<p>Copia las siguientes líneas, incluida la que empieza por # Redirecciones...</p>';
+        
+        echo '<textarea readonly style="width:98%; margin-right: 1rem; height: 300px;">';
+
+            // fecha actual en formato DD/MM/AAAA
+            echo '# Redirecciones ' . date('d/m/Y') . '&#13;&#10;&#13;&#10;';
+
+            while ( $products->have_posts() ) {
+                $products->the_post();
+                // echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+                // get rank math primary category
+                $destination = get_home_url() . '/';
+                $primary_cat_id = get_post_meta( get_the_ID(), 'rank_math_primary_product_cat', true );
+                if ( $primary_cat_id ) {
+                    $primary_cat = get_term( $primary_cat_id );
+                    if ( !is_wp_error( $primary_cat ) ) {
+                        $destination = get_term_link( $primary_cat );
+                    }
+                } else {
+                    $cats = wp_get_object_terms( get_the_ID(), 'product_cat' );
+                    foreach( $cats as $cat ) {
+                        if ( 
+                            $cat->slug != 'productos-baja' && 
+                            $cat->slug != 'novedades' &&
+                            $cat->slug != 'sin-categoria' &&
+                            $cat->slug != 'sin-descuento' &&
+                            $cat->slug != 'venta-privada'
+                        ) {
+                            $destination = get_term_link( $cat );
+                            break;
+                        }
+                    }
+                }
+
+                $origin = str_replace( get_home_url(), '', get_permalink() );
+                echo 'Redirect 301 ' . $origin . ' ' . $destination . '&#13;&#10;';
+            }
+
+            wp_reset_postdata();
+
+        echo '</textarea>';
+
+    } else {
+        echo 'No se encontraron productos en la categoría "productos-baja".';
+    }
 }

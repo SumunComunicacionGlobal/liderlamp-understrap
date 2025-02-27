@@ -112,7 +112,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 
 					<<?php echo $title_html_tag; ?> class="mb-0">
 
-						<button class="btn btn-link<?php echo $collapsed_class; ?>" data-toggle="collapse" data-target="#tab-<?php echo esc_attr( $key ); ?>" aria-expanded="<?php echo $collapse_aria_expanded; ?>" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
+						<button class="btn btn-link<?php echo $collapsed_class; ?>" id="tab-button-<?php echo esc_attr( $key ); ?>" data-toggle="collapse" data-target="#tab-<?php echo esc_attr( $key ); ?>" aria-expanded="<?php echo $collapse_aria_expanded; ?>" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
 							
 							<?php echo wp_kses_post( apply_filters( 'woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key ) ); ?>
 
@@ -141,6 +141,41 @@ if ( ! empty( $product_tabs ) ) : ?>
 			</div> <!-- .card -->
 
 		<?php endforeach; ?>
+
+		<div class="card">
+
+			<div class="card-header" id="tab-title-regalo-button">
+
+				<p class="mb-0">
+
+					<?php
+						$titulo = $post->post_title;
+						$url = get_the_permalink();
+						$imagen = get_the_post_thumbnail_url( null, 'medium' );
+						$imagen = str_replace( 
+							array(
+								'%C3%97',
+								'×'
+							),
+							array(
+								'x',
+								'x'
+							),
+							$imagen
+						);
+					?>
+
+					<a href="<?php echo get_the_permalink( QUIERO_QUE_ME_LO_REGALEN_ID ); ?>?titulo=<?php echo $titulo; ?>&url=<?php echo $url; ?>&imagen=<?php echo $imagen; ?>" class="btn btn-link collapsed" id="tab-button-regalo-button" rel="noopener noreferrer noindex nofollow" target="_blank">
+						
+						<?php echo __( 'Quiero que me lo regalen', 'liderlamp' ); ?>
+
+					</a>
+
+				</p>
+
+			</div> <!-- .card-header -->
+
+		</div> <!-- .card -->
 
 	</div> <!-- .woocommerce-tabs -->
 

@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../plugins/woo-product-feed-pro"
 		}
 	],
 	"settings": {}
