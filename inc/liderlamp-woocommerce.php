@@ -1383,6 +1383,7 @@ function liderlamp_custom_google_product_type( $value, $object_id, $meta_key, $s
             remove_filter( 'get_post_metadata', 'liderlamp_custom_google_product_type', 10, 5 );
             $post_meta = get_post_meta( $object_id, $meta_key, $single );
             add_filter( 'get_post_metadata', 'liderlamp_custom_google_product_type', 10, 5 );
+            if ( is_array($post_meta) ) $post_meta = reset( $post_meta );
             $post_meta = explode( PHP_EOL, $post_meta );
             $post_meta = implode( "</g:product_highlight><g:product_highlight>", $post_meta );
             $post_meta = html_entity_decode( $post_meta );
