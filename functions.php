@@ -779,3 +779,25 @@ function liderlamp_hide_term( $terms, $taxonomies, $args, $term_query ) {
 
 }
 
+/**
+ * Show the banner when a html element with class 'wt-cli-manage-consent-link' menu-item is clicked
+ */
+function cmplz_show_banner_on_click() {
+	?>
+	<script>
+        function addEvent(event, selector, callback, context) {
+            document.addEventListener(event, e => {
+                if ( e.target.closest(selector) ) {
+                    callback(e);
+                }
+            });
+        }
+        addEvent('click', 'li.wt-cli-manage-consent-link > a, a.wt-cli-manage-consent-link', function(){
+            document.querySelectorAll('.cmplz-manage-consent').forEach(obj => {
+                obj.click();
+            });
+        });
+	</script>
+	<?php
+}
+add_action( 'wp_footer', 'cmplz_show_banner_on_click' );
