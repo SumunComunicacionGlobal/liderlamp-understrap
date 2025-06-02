@@ -730,7 +730,7 @@ function liderlamp_compartir_producto() {
             echo do_shortcode( '[TheChamp-Sharing style="color:#222222;"]' );
         }
 
-        if ( is_plugin_active( 'ti-woocommerce-wishlist/ti-woocommerce-wishlist.php' ) ) {
+        if ( class_exists( 'TInvWL' ) ) {
             echo do_shortcode( '[ti_wishlists_addtowishlist]' );
         }
 

@@ -80,7 +80,7 @@ $container = get_theme_mod( 'understrap_container_type' );
 
 					<?php } ?>
 
-					<?php if ( is_plugin_active( 'ti-woocommerce-wishlist/ti-woocommerce-wishlist.php' ) ) { ?>
+					<?php if ( class_exists( 'TInvWL' ) ) { ?>
 						
 						<a href="<?php echo get_permalink( $wishlist_options['page_wishlist'] ); ?>" title="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/like.svg" alt="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>" width="21" height="20"></a>
 
