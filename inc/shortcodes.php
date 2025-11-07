@@ -1,10 +1,5 @@
 <?php 
 
-function get_resenas() {
-    // return '<p class="text-center">Aquí irán las reseñas</p>';
-}
-add_shortcode( 'resenas', 'get_resenas' );
-
 function get_redes_sociales() {
 
     $r = '';

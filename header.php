@@ -80,9 +80,13 @@ $container = get_theme_mod( 'understrap_container_type' );
 
 					<?php } ?>
 
-					<?php if ( class_exists( 'TInvWL' ) ) { ?>
+					<?php if ( class_exists( 'TInvWL' ) ) { 
+						$my_wishlist_endpoint_slug = $wishlist_options['my_account_endpoint_slug'];
+						$my_wishlist_title = $wishlist_options['default_title'];
+						$wishlist_endpoint_url = wc_get_account_endpoint_url( $my_wishlist_endpoint_slug );
+						?>
 						
-						<a href="<?php echo get_permalink( $wishlist_options['page_wishlist'] ); ?>" title="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/like.svg" alt="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>" width="21" height="20"></a>
+						<a href="<?php echo $wishlist_endpoint_url; ?>" title="<?php echo $my_wishlist_title; ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/like.svg" alt="<?php echo get_the_title( $wishlist_options['page_wishlist'] ); ?>" width="21" height="20"></a>
 
 					<?php } ?>
 

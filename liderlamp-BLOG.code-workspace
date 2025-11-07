@@ -8,6 +8,12 @@
 		},
 		{
 			"path": "../../plugins/ti-woocommerce-wishlist-premium"
+		},
+		{
+			"path": "../../plugins/woocommerce"
+		},
+		{
+			"path": "../../plugins/sumun"
 		}
 	],
 	"settings": {}

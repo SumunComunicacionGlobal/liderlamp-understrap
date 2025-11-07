@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 
 	$query = new WP_Query($args);
+	
 	if ($query->have_posts()) {
 
 		echo '<div id="carousel-testimonios" class="slider-testimonios">';

@@ -64,7 +64,6 @@
 
 .woocommerce-account {
 
-    .woocommerce-MyAccount-content,
     .woocommerce-MyAccount-navigation {
 		margin-bottom: 2rem;
         background-color: $light;
@@ -77,6 +76,18 @@
         
         > .container {
             max-width: 1440px;
+        }
+
+    }
+
+    @include media-breakpoint-up(md) {
+
+        .woocommerce-MyAccount-content {
+            width: calc(100% - 256px - #{$grid-gutter-width});
+        }
+
+        .woocommerce-MyAccount-navigation {
+            width: 256px;
         }
 
     }
@@ -114,4 +125,8 @@
 
 .woocommerce tbody button.button {
     @extend .btn-sm;
+}
+
+.add-all-to-cart-form {
+    clear: both;
 }

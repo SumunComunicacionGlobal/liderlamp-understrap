@@ -933,7 +933,7 @@ function woo_personalize_order_received_title( $title, $id ) {
             }
         }
 
-        if ( isset ( $order ) ) {
+        if ( isset ( $order ) && $order ) {
             //$title = sprintf( "You are awesome, %s!", esc_html( $order->billing_first_name ) ); // use this for WooCommerce versions older then v2.7
         $title = sprintf( __( 'Gracias, %s!', 'liderlamp' ), esc_html( $order->get_billing_first_name() ) );
         }
@@ -1178,6 +1178,8 @@ function liderlamp_youtube_shorts() {
                 $urls_array = explode( PHP_EOL, $urls );
 
                 foreach( $urls_array as $url ) {
+
+                    if ( !$url ) continue;
                     
                     $url_components = parse_url( $url );
                     $video_id = false;
@@ -1201,20 +1203,21 @@ function liderlamp_youtube_shorts() {
 
                 }
 
-                // $titulos = get_youtube_titles( $video_ids );
+                $titulos = get_youtube_titles( $video_ids );
 
                 foreach( $urls_array as $index => $url ) {
 
                     $video_id = basename( $url );
                     $link_url = 'https://www.youtube.com/watch?v=' . $video_id;
-                    // $titulo = $titulos[$index];
+                    $titulo = $titulos[$index];
+                    
 
 
                     echo '<a class="story" href="'.$link_url.'" rel="lightbox">';
                         echo '<div class="story-image-wrapper">';
                             echo '<img class="story-image" src="https://img.youtube.com/vi/'.$video_id.'/0.jpg" alt="'.get_the_title().'" />';
                         echo '</div>';
-                        // echo '<p class="story-title">'.$titulo.'</p>';
+                        echo '<p class="story-title">'.$titulo.'</p>';
                     echo '</a>';
 
                 }
@@ -1795,3 +1798,67 @@ function liderlamp_product_options_page() {
         echo 'No se encontraron productos en la categoría "productos-baja".';
     }
 }
+
+
+// SETS DE PRODUCTOS O SHOP THE LOOK
+add_action( 'woocommerce_after_shop_loop_item', function() {
+    if ( is_tax( 'product_set' ) ) {
+        add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+    }
+}, 1 );
+
+add_action( 'woocommerce_before_shop_loop', function() {
+    if ( is_tax( 'product_set' ) ) {
+        // Move after catalog ordering
+        add_action( 'woocommerce_before_shop_loop', function() {
+            global $wp_query;
+            $product_ids = wp_list_pluck( $wp_query->posts, 'ID' );
+            if ( ! empty( $product_ids ) ) {
+                $ids = implode( ',', $product_ids );
+                echo '<form method="post" class="add-all-to-cart-form" style="margin-bottom:20px;">';
+                echo '<input type="hidden" name="add_all_to_cart_ids" value="' . esc_attr( $ids ) . '">';
+                echo '<button type="submit" class="button add-all-to-cart">' . __( 'Añadir todos al carrito', 'liderlamp' ) . '</button>';
+                echo '</form>';
+            }
+        }, 35 ); // After catalog ordering (default: 20, result count: 30)
+    }
+} );
+
+add_action( 'wp', function() {
+    if (
+        isset( $_POST['add_all_to_cart_ids'] ) &&
+        is_tax( 'product_set' ) &&
+        ! empty( $_POST['add_all_to_cart_ids'] )
+    ) {
+        $ids = array_map( 'absint', explode( ',', $_POST['add_all_to_cart_ids'] ) );
+        foreach ( $ids as $product_id ) {
+            $product = wc_get_product( $product_id );
+            if ( $product && $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() ) {
+                WC()->cart->add_to_cart( $product_id );
+            }
+        }
+        // wp_safe_redirect( wc_get_cart_url() );
+        // exit;
+    }
+} );
+
+add_action( 'pre_user_query', 'change_users_search_order' );
+function change_users_search_order($obj){
+    if( !isset($_REQUEST['order']) || !in_array($_REQUEST['order'],array('asc','desc')) ){
+        $_REQUEST['order'] = 'desc';
+    }
+    $obj->query_orderby = "ORDER BY user_registered ".$_REQUEST['order']."";
+}
+
+add_action( 'woocommerce_after_checkout_billing_form', function() {
+
+    $checkout = WC()->checkout();
+    if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) {
+
+        echo '</div>'; // Close the billing form div
+        echo '<div class="woocommerce-account-fields-before">';
+            echo '<h3>' . __( 'Regístrate aquí como cliente', 'liderlamp' ) . '</h3>';
+            echo wpautop( __( 'Crea una cuenta ahora y disfruta de las ventajas de registrarte enLiderlamp. Crea tus listas de deseos, consulta pedidos anteriores y mucho más.', 'liderlamp' ) );
+    }
+
+});

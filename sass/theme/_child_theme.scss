@@ -741,6 +741,16 @@ h3.entry-title {
 		color: $white;
 	}
 
+	a.btn,
+	a.button {
+		@extend .btn-light;
+		color: $body-color !important;
+
+		&:hover {
+			color: $white !important;
+		}
+	}
+
 }
 
 .woocommerce-info {
@@ -785,6 +795,10 @@ h3.entry-title {
 
 	&:before {
 		color: $yellow;
+	}
+
+	li {
+		clear: both;
 	}
 }
 .woocommerce-orders-table__cell-order-actions .btn {
@@ -879,7 +893,7 @@ h3.entry-title {
 li.product {
 	position: relative;
 
-	a {
+	a:not(.btn) {
 		color: $dark;
 	}
 
@@ -1598,6 +1612,63 @@ li.wc-block-grid__product {
 
 	}
 
+}
+.tinv-wishlist {
+
+	.button i,
+	.navigation-button a i,
+	.tinvwl-estimate-wrap a i,
+	.tinv-modal-btn i {
+		margin-right: .25em;
+	}
+
+	.navigation-button .button,
+	.wishlist-action .button {
+		@extend .btn-sm;
+	}
+
+	.navigation-button .button {
+		@extend .btn-light;
+	}
+
+}
+
+#tinv_wishlist_create_button,
+.tinvwl-button:not(.add_to_cart_button),
+.tinv-modal button,
+.tinvwl_button_view {
+	@extend .btn;
+	@extend .btn-primary;
+}
+.tinvwl_button_close {
+	@extend .btn;
+	@extend .btn-outline-primary;
+}
+.tinv-close-modal,
+.tinv-close-modal:hover {
+	text-decoration: none;
+}
+.tinv-wishlist .estimate-dialogbox form textarea {
+	display: block;
+	width: 100%;
+}
+select.tinvwl_wishlist,
+.tinvwl_new_input {
+	@extend .form-control;
+}
+.tinv-wishlist table {
+
+	th {
+		font-size: $font-size-sm;
+	}
+
+	.product-thumbnail img {
+		width: 76px;
+	}
+
+	tfoot .button {
+		@extend .btn-sm;
+	}
 }
 /***/
 
@@ -2382,8 +2453,11 @@ article.testimonio {
 
 	.story {
 		text-align: center;
-		flex: 0 0 140px;
+		flex: 0 0 150px;
 		text-decoration: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.story-image-wrapper {
@@ -2409,6 +2483,10 @@ article.testimonio {
 	.story-title {
 		font-weight: $font-weight-bold;
 		font-size: $font-size-sm;
+		width: 150px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 
