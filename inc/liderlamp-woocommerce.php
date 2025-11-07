@@ -768,6 +768,9 @@ add_filter( 'woocommerce_demo_store','liderlamp_replace_dismiss' );
 * Show the subcategory title in the product loop. 
 */ 
 function woocommerce_template_loop_category_title( $category ) { 
+    if( is_wp_error( $category ) || !is_a( $category, 'WP_Term' ) || !$category ) {
+        return false;
+    }
     $tag = 'p';
   ?> 
   <<?php echo $tag; ?> class="woocommerce-loop-category__title"> 
