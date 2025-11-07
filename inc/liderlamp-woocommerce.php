@@ -1460,6 +1460,7 @@ function smn_get_custom_google_product_type( $object_id ) {
         }
         $ancestors[] = $primary_cat_id;
 
+        $primer_estilo = false;
         if ( $estilos_intersect ) {
             $primer_estilo = array_shift( $estilos_intersect );
             $ancestors[] = $primer_estilo;
@@ -1468,7 +1469,7 @@ function smn_get_custom_google_product_type( $object_id ) {
         $ancestors_array = [];
         foreach( $ancestors as $term_id ) {
             $term = get_term( $term_id );
-            if ( $term_id == $primer_estilo ) {
+            if ( $primer_estilo && $term_id == $primer_estilo ) {
                 $name = str_replace(
                     array(
                         'Lámparas ',
