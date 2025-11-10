@@ -155,7 +155,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 						$imagen = str_replace( 
 							array(
 								'%C3%97',
-								'x'
+								'×'
 							),
 							array(
 								'x',
