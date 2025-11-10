@@ -151,7 +151,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 					<?php
 						$titulo = $post->post_title;
 						$url = get_the_permalink();
-						$imagen = get_the_post_thumbnail_url( null, 'medium' );
+						$imagen = get_the_post_thumbnail_url( null, 'full' );
 						$imagen = str_replace( 
 							array(
 								'%C3%97',
