@@ -11,6 +11,7 @@ define('SIN_DESCUENTO_ID', 334 );
 define('VENTA_PRIVADA_ID', 532 );
 define('SIN_CATEGORIA_ID', 241 );
 define('COLECCION_REBAJAS_ID', 630 );
+define('DEVOLUCIONES_ID', 93056 );
 
 require_once( 'inc/wp-bootstrap-collapse-navwalker.php' );
 require_once( 'inc/liderlamp-widgets.php' );
