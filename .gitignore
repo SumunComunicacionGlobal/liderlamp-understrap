@@ -21,3 +21,6 @@ npm-debug.log
 /src/build/browser-sync.config.js
 
 gulpconfig.json
+
+# Ignore .DS_Store in any subfolder
+**/.DS_Store
