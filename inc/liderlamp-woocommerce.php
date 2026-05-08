@@ -1867,17 +1867,23 @@ add_action( 'woocommerce_after_checkout_billing_form', function() {
 
 });
 
-// Add custom link to WooCommerce account navigation (page ID 93056)
+// Add custom link to WooCommerce account navigation (page ID 93056) before logout
 add_filter( 'woocommerce_account_menu_items', function( $items ) {
-    // Add the link at the end
-    $page_id = 93056; // Replace with your page ID
+    $page_id = 93056; // ID de la página personalizada
     $title = get_the_title( $page_id );
-    $items['custom_page_devoluciones'] = $title;
-    return $items;
+    $new_items = array();
+    foreach ( $items as $key => $item ) {
+        if ( $key === 'customer-logout' ) {
+            // Insertar el enlace personalizado justo antes de 'Cerrar sesión'
+            $new_items['custom_page_devoluciones'] = $title;
+        }
+        $new_items[$key] = $item;
+    }
+    return $new_items;
 } );
 
 add_filter( 'woocommerce_get_endpoint_url', function( $url, $endpoint, $value, $permalink ) {
-    $page_id = 93056; // Replace with your page ID
+    $page_id = 93056; // ID de la página personalizada
     if ( $endpoint === 'custom_page_devoluciones' ) {
         $url = get_permalink( $page_id );
     }
