@@ -660,7 +660,7 @@ function liderlamp_woocommerce_taxonomy_description() {
     <?php } elseif ( is_woocommerce() && is_tax() ) {
 
         $term = get_queried_object();
-        if ( $term->parent > 0 || !is_tax('product_cat') ) {
+        if ( $term->parent > 0 || !is_tax('product_cat') || is_tax( 'product_cat', OUTLET_ID ) ) {
 
             $thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
             $galeria = get_term_meta( $term->term_id, 'galeria', true );

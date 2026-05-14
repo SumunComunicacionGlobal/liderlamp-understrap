@@ -9,6 +9,7 @@ define('NOVEDADES_ID', 113 );
 define('BAJA_ID', 604 );
 define('SIN_DESCUENTO_ID', 334 );
 define('VENTA_PRIVADA_ID', 532 );
+define('OUTLET_ID', 764 );
 define('SIN_CATEGORIA_ID', 241 );
 define('COLECCION_REBAJAS_ID', 630 );
 define('DEVOLUCIONES_ID', 93056 );
